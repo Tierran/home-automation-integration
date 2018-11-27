@@ -2,19 +2,20 @@ package com.ninetailsoftware.ha.integration.routes;
 
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ninetailsoftware.ha.integration.transformers.MqttTransformer;
 
 public class MyRoutes extends RouteBuilder {
 
-    Logger log;
+    Logger log = LoggerFactory.getLogger(MyRoutes.class);
     private String homeseerInputEndpoint;
     private String brmsInputEndpoint;
     private String cepOutputEndpoint;
@@ -36,7 +37,8 @@ public class MyRoutes extends RouteBuilder {
         this.homeseerRestEndpoint = appProps.getProperty("homeseerRestEndpoint");
         this.emailEndpoint = appProps.getProperty("emailEndpoint");
 
-		from(homeseerInputEndpoint).convertBodyTo(java.lang.String.class)
+        log.info("Connected to MQTT Endpoint : " + homeseerInputEndpoint);
+        from(homeseerInputEndpoint).convertBodyTo(java.lang.String.class)
 				.bean(mqttTransformer, "transformToCEPEvent(${header.CamelMQTTSubscribeTopic}, ${body})").marshal()
 				.json(JsonLibrary.Jackson).log("${body}").setHeader(Exchange.HTTP_METHOD, constant("POST"))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json")).to(cepOutputEndpoint);

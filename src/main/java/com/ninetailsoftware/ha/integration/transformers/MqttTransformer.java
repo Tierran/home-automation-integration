@@ -1,5 +1,7 @@
 package com.ninetailsoftware.ha.integration.transformers;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,5 +82,9 @@ public class MqttTransformer {
 		_retValue.setValue(tokens[4]);
 
 		return _retValue;
+	}
+	
+	public HaEvent returnSingleEvent(List<HaEvent> list) {
+		return list.get(0);
 	}
 }

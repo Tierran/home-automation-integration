@@ -53,7 +53,6 @@ public class MqttTransformer {
 
 		String delims = "[ ,]+";
 		String[] tokens = inbound.split(delims);
-		String source = tokens[1];
 		
 		log.info("Sending Message To HomeSeer");
 		log.info("Source: " + tokens[0]);

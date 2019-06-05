@@ -73,13 +73,13 @@ public class MyRoutes extends RouteBuilder {
 				.marshal().json(JsonLibrary.Jackson).log("${body}").setHeader(Exchange.HTTP_METHOD, constant("POST"))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json")).to(cepOutputEndpoint);
 
-		from(statusUpdateRequestEndpoint).setHeader("deviceid", new SimpleExpression("${body}"))
-				.setBody(new SimpleExpression("select * from DeviceTable where source = 'homeseer' and device_id = :?deviceid"))
+		from(statusUpdateRequestEndpoint)
+				.setBody(new SimpleExpression("select * from DeviceTable where source = 'homeseer' and device_id = '${body}'"))
 				.to("jdbc:dataSource?outputClass=com.ninetailsoftware.model.events.HaEvent&useHeadersAsParameters=true")
 				.choice()
 					.when(simple("${body.size()} > 0"))
 						.bean(mqttTransformer, "returnSingleEvent(${body})").marshal().json(JsonLibrary.Jackson)
-						.log("${body}").setHeader(Exchange.HTTP_METHOD, constant("POST"))
+						.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 						.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 						.to(cepOutputEndpoint)
 					.otherwise()
@@ -95,6 +95,7 @@ public class MyRoutes extends RouteBuilder {
 				.setHeader("source", simple("${body.source}"))
 				.setHeader("value", simple("${body.value}"))
 				.setBody(simple("insert into DeviceTable (device_id, source, value) values (:?deviceid, :?source, :?value) ON CONFLICT (device_id, source) DO UPDATE SET value = excluded.value"))
+				.log("${body}")
 				.to("jdbc:dataSource?outputClass=com.ninetailsoftware.model.events.HaEvent&useHeadersAsParameters=true");
 	}
 }

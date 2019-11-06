@@ -38,7 +38,7 @@ public class MqttTransformer {
 		log.info("Begining Transform: " +  body);
 		
 		String[] lines = body.split("\\n");
-		String line2 = lines[1];
+		String line2 = lines[1].split(":")[0];
 		
 		_retValue.setSource("adt");
 		_retValue.setValue(line2);

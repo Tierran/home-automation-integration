@@ -17,7 +17,7 @@ public class MqttTransformer {
 
 		String inbound = topic + " " + body;
 		
-		log.info("Begining transform: " + inbound);
+		log.info("Beginning transform: " + inbound);
 
 		String delims = "[ /]+";
 		String[] tokens = inbound.split(delims);
@@ -35,10 +35,12 @@ public class MqttTransformer {
 	public HaEvent adtEventTransformer(String body){
 		HaEvent _retValue = new HaEvent();
 		
-		log.info("Begining Transform: " +  body);
+		log.info("Beginning Transform: " +  body);
 		
-		String[] lines = body.split("\\n");
-		String line2 = lines[1].split(":")[0];
+		String[] lines = body.split(":");
+		String line2 = lines[0];
+		
+		log.info("Value: " + line2);
 		
 		_retValue.setSource("adt");
 		_retValue.setValue(line2);
@@ -49,7 +51,7 @@ public class MqttTransformer {
 	public ControlByRef transformToDeviceControl(String topic, String body){
 		String inbound = topic + " " + body;
 		
-		log.info("Begining transform: " + inbound);
+		log.info("Beginning transform: " + inbound);
 
 		String delims = "[ ,]+";
 		String[] tokens = inbound.split(delims);

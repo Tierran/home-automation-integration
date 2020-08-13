@@ -13,7 +13,7 @@ public class MqttTransformerTest {
 		MqttTransformer mt = new MqttTransformer();
 		
 		String emailBody = "System Armed (home mode): Your SimpliSafe System was armed (home) at 812 Jefferson Ave on 11-5-19 at 8:06 pm";
-		HaEvent event = mt.adtEventTransformer(emailBody);
+		HaEvent event = mt.alarmEventTransformer(emailBody);
 		
 		Assert.assertEquals("System Armed (home mode)", event.getValue());
 	}

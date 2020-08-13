@@ -32,7 +32,7 @@ public class MqttTransformer {
 		return _retValue;
 	}
 	
-	public HaEvent adtEventTransformer(String body){
+	public HaEvent alarmEventTransformer(String body){
 		HaEvent _retValue = new HaEvent();
 		
 		log.info("Beginning Transform: " +  body);
@@ -42,7 +42,7 @@ public class MqttTransformer {
 		
 		log.info("Value: " + line2);
 		
-		_retValue.setSource("adt");
+		_retValue.setSource("alarm");
 		_retValue.setValue(line2);
 		
 		return _retValue;		

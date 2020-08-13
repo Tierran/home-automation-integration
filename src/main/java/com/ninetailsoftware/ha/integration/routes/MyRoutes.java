@@ -69,7 +69,7 @@ public class MyRoutes extends RouteBuilder {
 		 * of events.
 		 */
 		
-		from(emailEndpoint).convertBodyTo(java.lang.String.class).bean(mqttTransformer, "adtEventTransformer(${body})")
+		from(emailEndpoint).convertBodyTo(java.lang.String.class).bean(mqttTransformer, "alarmEventTransformer(${body})")
 				.marshal().json(JsonLibrary.Jackson).log("${body}").setHeader(Exchange.HTTP_METHOD, constant("POST"))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json")).to(cepOutputEndpoint);
 
